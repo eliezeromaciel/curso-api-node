@@ -1,0 +1,51 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "curso NodeJS",
+    "dateExported": "2023-01-13T09:41:38.899Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "a4ad458b-d037-408f-a5c1-30dcb8320c89",
+            "colId": "125d67b9-7d13-4481-8b1d-d6fa01854a22",
+            "containerId": "",
+            "name": "exclui departamento",
+            "url": "localhost:3033/departamento/13",
+            "method": "DELETE",
+            "sortNum": 20000,
+            "created": "2023-01-13T09:35:00.018Z",
+            "modified": "2023-01-13T09:36:41.662Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "8d3876d2-9761-421e-8b00-2c50af8de793",
+            "colId": "125d67b9-7d13-4481-8b1d-d6fa01854a22",
+            "containerId": "",
+            "name": "cria departamento",
+            "url": "localhost:3033/departamentos",
+            "method": "GET",
+            "sortNum": 30000,
+            "created": "2023-01-13T09:37:39.271Z",
+            "modified": "2023-01-13T09:38:09.373Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "7d9fbb53-8323-4119-9d93-96c5caf4bf60",
+            "colId": "125d67b9-7d13-4481-8b1d-d6fa01854a22",
+            "containerId": "",
+            "name": "thunderclient",
+            "url": "https://www.thunderclient.com/welcome",
+            "method": "GET",
+            "sortNum": 40000,
+            "created": "2023-01-13T09:39:35.644Z",
+            "modified": "2023-01-13T09:39:35.644Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        }
+    ]
+}
