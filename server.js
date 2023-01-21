@@ -27,9 +27,6 @@ const swaggerSpec = swaggerJSDoc(options)
 // configurar minah api para usar o middwaler swagger pq tudo q for requisicao , todas as interpretacoes de rotas deverao passar também pelo swagger. 
 app.use('/swagger-ui', swaggerUI.serve, swaggerUI.setup(swaggerSpec))
 
-
-
-
 const useMock = false
 
 /**
@@ -62,8 +59,19 @@ app.get('/departamentos', (req, res) => {
   })
 })
 
-
-app.get('/departamentos/:idDepartamento', (req, res) => {
+/**
+ * @swagger
+ * 
+ * /departamentos:
+ *  get:
+ *    description: lista um departamento pelo seu ID.
+ *    produces: 
+ *      - application/json
+ *    responses: 
+ *      200:
+ *        description: exibe apenas um departamento, pelo parâmetro ID.
+ */
+app.get('/departamento/:idDepartamento', (req, res) => {
   const { idDepartamento } = req.params
   const method = req.method
 
@@ -79,7 +87,6 @@ app.get('/departamentos/:idDepartamento', (req, res) => {
     res.send(result)
   })
 })
-
 
 
 
@@ -110,6 +117,12 @@ app.get('/departamentos/:idDepartamento', (req, res) => {
   app.post('/departamentos', (req, res) => {
     const method = req.method
     console.log(`${method} /departamentos`)
+
+    if (useMock) {
+      res.send(`listarDepartamentoMOCK sei la lkalj;lkjaohaiu`)
+      return  
+    }
+
     let { nome = '', sigla = '' } = req.body
   
     nome = nome.trim()
@@ -148,9 +161,40 @@ app.get('/departamentos/:idDepartamento', (req, res) => {
 app.put('/departamento/:idDepartamento',  (req, res) => {
   const { idDepartamento } = req.params
   const method = req.method
-  console.log(`${method} /departamentos/${idDepartamento}`)
-  res.send(`${method} /departamentos/${idDepartamento}`)
+  console.log(`${method} /departamento/${idDepartamento}`)
+  if (useMock) {
+    res.send(`listarDepartamentoMOCK sei la lkalj;lkjaohaiu`)
+    return  
+  }
+
+  let { nome,  sigla} = req.body
+  
+  if (nome) {
+    con.query((`UPDATE DEPARTAMENTOS SET sigla = '${nome}' WHERE id_departamento = '${idDepartamento}'`), (err, result) => {
+      if (err){
+        app.status(500)
+        app.send(err)
+      }
+      app.send(result)
+    })
+  }
+
+  if (sigla) {
+    con.query((`UPDATE DEPARTAMENTOS SET sigla = '${sigla}' WHERE id_departamento = '${idDepartamento}'`), (err, result) => {
+      if (err){
+        app.status(500)
+        app.send(err)
+      }
+      app.send(result)
+    })
+  }
+
 })
+
+
+
+
+
 
 app.delete('/departamento/:idDepartamento',  (req, res) => {
   const { idDepartamento } = req.params
