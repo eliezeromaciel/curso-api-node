@@ -1,8 +1,8 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import con from './connect-db.js'
-import listarDepartamentosMOCK from './mock/listarDepartamentosMOCK.json' assert {type: 'json'}
-import listarDepartamentoMOCK from './mock/listarDepartamentoMOCK.json' assert {type: 'json'}
+import listarDepartamentosMOCK from '../mock/listarDepartamentosMOCK.json' assert {type: 'json'}
+import listarDepartamentoMOCK from '../mock/listarDepartamentoMOCK.json' assert {type: 'json'}
 import swaggerJSDoc from 'swagger-jsdoc'
 import swaggerUI from 'swagger-ui-express'
 
@@ -16,7 +16,7 @@ const options = {
   definition: {
     info: {
       title: 'API NODE JS',
-      version: '1.0.0'
+        version: '1.0.0'
     }
   },
   apis: ['server.js']
@@ -177,6 +177,19 @@ app.get('/departamento/:idDepartamento', (req, res) => {
     const { idDepartamento } = req.params;
     const { nome, sigla } = req.body;
     
+    if (nome && sigla) {
+      con.query(`UPDATE DEPARTAMENTOS SET nome='${nome}', sigla='${sigla}' WHERE id_departamento='${idDepartamento}'`, (err, result) => {
+            if (err) {
+              res.status(500)
+              res.send(err)
+            }
+            console.log(`update por nome E sigla`)
+            res.send(result)
+          })
+      return
+    }
+
+
     if (nome){
     con.query(`UPDATE DEPARTAMENTOS SET nome='${nome}' WHERE id_departamento='${idDepartamento}'`, (err, result) => {
       if (err) {
@@ -185,7 +198,9 @@ app.get('/departamento/:idDepartamento', (req, res) => {
       }
       console.log('uptade pelo NOME')
       res.send(result)
-    })}
+    })
+    return
+  }
 
     if (sigla){
       con.query(`UPDATE DEPARTAMENTOS SET sigla='${sigla}' WHERE id_departamento='${idDepartamento}'`, (err, result) => {
@@ -193,11 +208,14 @@ app.get('/departamento/:idDepartamento', (req, res) => {
           res.status(500)
           res.send(err)
         }
-        console.log(sigla)
         console.log('uptade pela SIGLA')
 
         res.send(result)
-      })}
+      })
+      return
+    }
+
+    
 
 });
   
