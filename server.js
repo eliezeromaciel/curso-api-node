@@ -156,44 +156,52 @@ app.get('/departamento/:idDepartamento', (req, res) => {
   })
 
 
- 
-
-app.put('/departamento/:idDepartamento',  (req, res) => {
-  const { idDepartamento } = req.params
-  const method = req.method
-  console.log(`${method} /departamento/${idDepartamento}`)
-  if (useMock) {
-    res.send(`listarDepartamentoMOCK sei la lkalj;lkjaohaiu`)
-    return  
-  }
-
-  let { nome,  sigla} = req.body
+  // ATUALIZA, TENDO COMO PARAMETROS NOME E SIGLA
+  app.put('/departamento/:idDepartamento', (req, res) => {
+    const { idDepartamento } = req.params;
+    const { nome, sigla } = req.body;
+    con.query(`UPDATE DEPARTAMENTOS SET nome='${nome}', sigla='${sigla}' WHERE id_departamento='${idDepartamento}'`, (err, result) => {
+      if (err) {
+        res.status(500)
+        res.send(err)
+      }
+      res.send(result)
+    })
+  });
   
-  if (nome) {
-    con.query((`UPDATE DEPARTAMENTOS SET sigla = '${nome}' WHERE id_departamento = '${idDepartamento}'`), (err, result) => {
-      if (err){
-        app.status(500)
-        app.send(err)
-      }
-      app.send(result)
-    })
-  }
+  
+// app.put('/departamento/:idDepartamento',  (req, res) => {
+//   const { idDepartamento } = req.params
+//   const method = req.method
+//   console.log(`${method} /departamento/${idDepartamento}`)
+//   if (useMock) {
+//     res.send(`listarDepartamentoMOCK sei la lkalj;lkjaohaiu`)
+//     return  
+//   }
 
-  if (sigla) {
-    con.query((`UPDATE DEPARTAMENTOS SET sigla = '${sigla}' WHERE id_departamento = '${idDepartamento}'`), (err, result) => {
-      if (err){
-        app.status(500)
-        app.send(err)
-      }
-      app.send(result)
-    })
-  }
+//   let { nome,  sigla} = req.body
+  
+//   if (nome) {
+//     con.query((`UPDATE DEPARTAMENTOS SET sigla = '${nome}' WHERE id_departamento = '${idDepartamento}'`), (err, result) => {
+//       if (err){
+//         app.status(500)
+//         app.send(err)
+//       }
+//       app.send(result)
+//     })
+//   }
 
-})
+//   if (sigla) {
+//     con.query((`UPDATE DEPARTAMENTOS SET sigla = '${sigla}' WHERE id_departamento = '${idDepartamento}'`), (err, result) => {
+//       if (err){
+//         app.status(500)
+//         app.send(err)
+//       }
+//       app.send(result)
+//     })
+//   }
 
-
-
-
+// })
 
 
 app.delete('/departamento/:idDepartamento',  (req, res) => {
