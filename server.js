@@ -1,7 +1,8 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import con from './connect-db.js'
-import listarDepartamentosMOCK from './mock/listarDepartamentoMOCK.json' assert {type: 'json'}
+// import listarDepartamentosMOCK from './mock/listarDepartamentoMOCK.json' assert {type: 'json'}
+
 import swaggerJSDoc from 'swagger-jsdoc'
 import swaggerUI from 'swagger-ui-express'
 
@@ -15,7 +16,7 @@ const options = {
   definition: {
     info: {
       title: 'API NODE JS',
-        version: '1.0.0'
+      version: '1.0.0'
     }
   },
   apis: ['server.js']
@@ -45,7 +46,7 @@ app.get('/departamentos', (req, res) => {
   console.log(`${method} /departamentos`)
 
   if (useMock) {
-    res.send(listarDepartamentosMOCK)
+    res.send('listarDepartamentosMOCK')
     return  // PRECISO USAR O RETURN, PARA NAO DAR ERRO (A PARTIR DA VERSAO XXX DO NODE)
   }
 
@@ -73,9 +74,10 @@ app.get('/departamentos', (req, res) => {
 app.get('/departamento/:idDepartamento', (req, res) => {
   const { idDepartamento } = req.params
   const method = req.method
+  console.log(`${method} /departamento/${idDepartamento}`)
 
   if (useMock) {
-    res.send(listarDepartamentoMOCK)
+    res.send('listarDepartamentosMOCK')
     return  
   }
   con.query(`SELECT * FROM DEPARTAMENTOS WHERE id_departamento='${idDepartamento}'`, (err, result) => {
@@ -113,49 +115,49 @@ app.get('/departamento/:idDepartamento', (req, res) => {
  *      500:
  *        description: erro do banco de dados
  */
-  app.post('/departamentos', (req, res) => {
-    const method = req.method
-    console.log(`${method} /departamentos`)
+app.post('/departamentos', (req, res) => {
+  const method = req.method
+  console.log(`${method} /departamentos`)
 
-    if (useMock) {
-      res.send(`listarDepartamentoMOCK sei la lkalj;lkjaohaiu`)
-      return  
-    }
+  if (useMock) {
+    res.send('listarDepartamentoMOCK sei la lkalj;lkjaohaiu')
+    return  
+  }
 
-    let { nome = '', sigla = '' } = req.body
+  let { nome = '', sigla = '' } = req.body
   
-    nome = nome.trim()
-    sigla = sigla.trim()
+  nome = nome.trim()
+  sigla = sigla.trim()
   
-    if (nome === '' || sigla === '') {
-      res.send({
-        message: 'Wrong or insufficient parameters',
-        parameters_received: req.body
-      })
-      return 
-    }
-  
-    con.query(`INSERT INTO DEPARTAMENTOS (nome, sigla) VALUES ('${nome}', '${sigla}')`, (err, result) => {
-      if (err) {
-        res.status(500)
-        res.send(err)
-        return
-      }
-  
-      //Em caso de sucesso:
-      if (result.insertId) {
-        res.send({
-          message: 'Register inserted with success',
-          insertId: result.insertId
-        })  
-        return
-      }
-      res.send(result)
+  if (nome === '' || sigla === '') {
+    res.send({
+      message: 'Wrong or insufficient parameters',
+      parameters_received: req.body
     })
+    return 
+  }
+  
+  con.query(`INSERT INTO DEPARTAMENTOS (nome, sigla) VALUES ('${nome}', '${sigla}')`, (err, result) => {
+    if (err) {
+      res.status(500)
+      res.send(err)
+      return
+    }
+  
+    //Em caso de sucesso:
+    if (result.insertId) {
+      res.send({
+        message: 'Register inserted with success',
+        insertId: result.insertId
+      })  
+      return
+    }
+    res.send(result)
   })
+})
 
 
-  /**
+/**
  * @swagger
  * 
  * /departamento/{idDepartamento}:
@@ -202,30 +204,30 @@ app.get('/departamento/:idDepartamento', (req, res) => {
  *      500:
  *        description: Erro de banco de dados.
  */
-  app.put('/departamento/:idDepartamento', (req, res) => {
-    const { idDepartamento } = req.params;
-    const { nome, sigla } = req.body;
+app.put('/departamento/:idDepartamento', (req, res) => {
+  const { idDepartamento } = req.params
+  const { nome, sigla } = req.body
     
-    if (nome && sigla) {
-      con.query(`UPDATE DEPARTAMENTOS SET nome='${nome}', sigla='${sigla}' WHERE id_departamento='${idDepartamento}'`, (err, result) => {
-            if (err) {
-              res.status(500)
-              res.send(err)
-            }
+  if (nome && sigla) {
+    con.query(`UPDATE DEPARTAMENTOS SET nome='${nome}', sigla='${sigla}' WHERE id_departamento='${idDepartamento}'`, (err, result) => {
+      if (err) {
+        res.status(500)
+        res.send(err)
+      }
           
-            if (result.changedRows ==! 0) {
-              res.send({
-                message: 'NOME e SIGLA modified with success',
-              })
-            }
-            else {res.send({
-              message: 'register not modified'
-            })}
-          })
-      return
-    }
+      if (result.changedRows ==! 0) {
+        res.send({
+          message: 'NOME e SIGLA modified with success',
+        })
+      }
+      else {res.send({
+        message: 'register not modified'
+      })}
+    })
+    return
+  }
 
-    if (nome){
+  if (nome){
     con.query(`UPDATE DEPARTAMENTOS SET nome='${nome}' WHERE id_departamento='${idDepartamento}'`, (err, result) => {
       if (err) {
         res.status(500)
@@ -241,36 +243,36 @@ app.get('/departamento/:idDepartamento', (req, res) => {
       else {
         res.status(400)
         res.send({
+          message: 'register not modified'
+        })}
+    })
+    return
+  }
+
+  if (sigla){
+    con.query(`UPDATE DEPARTAMENTOS SET sigla='${sigla}' WHERE id_departamento='${idDepartamento}'`, (err, result) => {
+      if (err) {
+        res.status(500)
+        res.send(err)
+      }
+      
+      if (result.changedRows ==! 0) {
+        res.send({
+          message: 'SIGLA modified with success',
+        })
+      }
+      else {res.send({
         message: 'register not modified'
       })}
     })
-return
-}
-
-    if (sigla){
-      con.query(`UPDATE DEPARTAMENTOS SET sigla='${sigla}' WHERE id_departamento='${idDepartamento}'`, (err, result) => {
-        if (err) {
-          res.status(500)
-          res.send(err)
-        }
-      
-        if (result.changedRows ==! 0) {
-          res.send({
-            message: 'SIGLA modified with success',
-          })
-        }
-        else {res.send({
-          message: 'register not modified'
-        })}
-      })
-  return
-}
-});
+    return
+  }
+})
   
 
 
 
- /**
+/**
  * @swagger
  * 
  * /departamento/{idDepartamento}:
@@ -307,6 +309,8 @@ return
 app.delete('/departamento/:idDepartamento',  (req, res) => {
   const { idDepartamento } = req.params
   const method = req.method
+  console.log(`${method} /departamento/${idDepartamento}`)
+
 
   con.query(`DELETE FROM DEPARTAMENTOS WHERE id_departamento='${idDepartamento}'`, (err, result) => {
     if (err) {
@@ -327,7 +331,7 @@ app.delete('/departamento/:idDepartamento',  (req, res) => {
       })
     }
   })
-return
+  return
 })
 
 
@@ -344,6 +348,7 @@ return
 //     res.send(result)
 //   })
 // })
+
 
 // Exemplo utilizando diversos formatos de parametros professor
 app.get('/funcionarios/:busca', (req, res) => {
