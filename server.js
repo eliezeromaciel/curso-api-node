@@ -38,7 +38,7 @@ const useMock = false
  *      - application/json
  *    responses: 
  *      200:
- *        description: eexibe todos os departamentos, em um vetor.
+ *        description: exibe todos os departamentos, em um vetor.
  */
 app.get('/departamentos', (req, res) => {
   const method = req.method
@@ -193,10 +193,15 @@ app.get('/departamento/:idDepartamento', (req, res) => {
  *              example: Departamento atualizado com sucesso.
  *      400:
  *        description: Requisição inválida.
+ *        schema:
+ *          type: object
+ *          properties:
+ *            message:
+ *              type: string
+ *              example: register not modified.
  *      500:
  *        description: Erro de banco de dados.
  */
-  
   app.put('/departamento/:idDepartamento', (req, res) => {
     const { idDepartamento } = req.params;
     const { nome, sigla } = req.body;
@@ -228,11 +233,14 @@ app.get('/departamento/:idDepartamento', (req, res) => {
       }
     
       if (result.changedRows ==! 0) {
+        res.status(200)
         res.send({
           message: 'NOME modified with success',
         })
       }
-      else {res.send({
+      else {
+        res.status(400)
+        res.send({
         message: 'register not modified'
       })}
     })
@@ -262,12 +270,64 @@ return
 
 
 
-
+ /**
+ * @swagger
+ * 
+ * /departamento/{idDepartamento}:
+ *  delete:
+ *    description: deleta um departamento na base de dados com base no ID do departamento especificado na URL.
+ *    produces:
+ *      - application/json
+ *    parameters:
+ *      - in: path
+ *        name: idDepartamento
+ *        description: ID do departamento a ser deletado.
+ *        required: true
+ *        type: integer
+ *    responses:
+ *      200:
+ *        description: Departamento deletado com sucesso.
+ *        schema:
+ *          type: object
+ *          properties:
+ *            message:
+ *              type: string
+ *              example: DEPTO deleted with success.
+ *      400:
+ *        description: Requisição inválida.
+ *        schema:
+ *          type: object
+ *          properties:
+ *            message:
+ *              type: string
+ *              example: Deleted not executed.
+ *      500:
+ *        description: Erro de banco de dados.
+ */
 app.delete('/departamento/:idDepartamento',  (req, res) => {
   const { idDepartamento } = req.params
   const method = req.method
-  console.log(`${method} /departamentos/${idDepartamento}`)
-  res.send(`${method} /departamentos/${idDepartamento}`)
+
+  con.query(`DELETE FROM DEPARTAMENTOS WHERE id_departamento='${idDepartamento}'`, (err, result) => {
+    if (err) {
+      res.status(500)
+      res.send(err)
+    }
+    
+    if (result.affectedRows ==! 0) {
+      res.status(200)
+      res.send({
+        message: 'DEPTO deleted with success',
+      })
+    }
+    else {
+      res.status(400)
+      res.send({      
+        message: 'Deleted not executed'
+      })
+    }
+  })
+return
 })
 
 
