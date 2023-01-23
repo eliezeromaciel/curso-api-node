@@ -154,6 +154,49 @@ app.get('/departamento/:idDepartamento', (req, res) => {
     })
   })
 
+
+  /**
+ * @swagger
+ * 
+ * /departamento/{idDepartamento}:
+ *  put:
+ *    description: Atualiza um departamento na base de dados com base no ID do departamento especificado na URL.
+ *    produces:
+ *      - application/json
+ *    parameters:
+ *      - in: path
+ *        name: idDepartamento
+ *        description: ID do departamento a ser atualizado.
+ *        required: true
+ *        type: integer
+ *      - in: body
+ *        name: body
+ *        description: Objeto JSON com as informações do departamento a serem atualizadas.
+ *        required: true
+ *        schema:
+ *          type: object
+ *          properties:
+ *            nome:
+ *              type: string
+ *              description: Nome do departamento
+ *            sigla:
+ *              type: string
+ *              description: Sigla do departamento.
+ *    responses:
+ *      200:
+ *        description: Departamento atualizado com sucesso.
+ *        schema:
+ *          type: object
+ *          properties:
+ *            message:
+ *              type: string
+ *              example: Departamento atualizado com sucesso.
+ *      400:
+ *        description: Requisição inválida.
+ *      500:
+ *        description: Erro de banco de dados.
+ */
+  
   app.put('/departamento/:idDepartamento', (req, res) => {
     const { idDepartamento } = req.params;
     const { nome, sigla } = req.body;
@@ -216,6 +259,9 @@ return
 }
 });
   
+
+
+
 
 app.delete('/departamento/:idDepartamento',  (req, res) => {
   const { idDepartamento } = req.params
