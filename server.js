@@ -1,8 +1,7 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import con from './connect-db.js'
-import listarDepartamentosMOCK from '../mock/listarDepartamentosMOCK.json' assert {type: 'json'}
-import listarDepartamentoMOCK from '../mock/listarDepartamentoMOCK.json' assert {type: 'json'}
+import listarDepartamentosMOCK from './mock/listarDepartamentoMOCK.json' assert {type: 'json'}
 import swaggerJSDoc from 'swagger-jsdoc'
 import swaggerUI from 'swagger-ui-express'
 
@@ -155,24 +154,6 @@ app.get('/departamento/:idDepartamento', (req, res) => {
     })
   })
 
-
-  // ATUALIZA, TENDO COMO PARAMETROS NOME E SIGLA
-
-  // app.put('/departamento/:idDepartamento', (req, res) => {
-  //   const { idDepartamento } = req.params;
-  //   const { nome, sigla } = req.body;
-  //   con.query(`UPDATE DEPARTAMENTOS SET nome='${nome}', sigla='${sigla}' WHERE id_departamento='${idDepartamento}'`, (err, result) => {
-  //     if (err) {
-  //       res.status(500)
-  //       res.send(err)
-  //     }
-  //     res.send(result)
-  //   })
-  // });
-  
-  
-
-  //ATUALIZA POR NOME OOOUUUUUU POR SIGLA
   app.put('/departamento/:idDepartamento', (req, res) => {
     const { idDepartamento } = req.params;
     const { nome, sigla } = req.body;
@@ -183,12 +164,18 @@ app.get('/departamento/:idDepartamento', (req, res) => {
               res.status(500)
               res.send(err)
             }
-            console.log(`update por nome E sigla`)
-            res.send(result)
+          
+            if (result.changedRows ==! 0) {
+              res.send({
+                message: 'NOME e SIGLA modified with success',
+              })
+            }
+            else {res.send({
+              message: 'register not modified'
+            })}
           })
       return
     }
-
 
     if (nome){
     con.query(`UPDATE DEPARTAMENTOS SET nome='${nome}' WHERE id_departamento='${idDepartamento}'`, (err, result) => {
@@ -196,11 +183,18 @@ app.get('/departamento/:idDepartamento', (req, res) => {
         res.status(500)
         res.send(err)
       }
-      console.log('uptade pelo NOME')
-      res.send(result)
+    
+      if (result.changedRows ==! 0) {
+        res.send({
+          message: 'NOME modified with success',
+        })
+      }
+      else {res.send({
+        message: 'register not modified'
+      })}
     })
-    return
-  }
+return
+}
 
     if (sigla){
       con.query(`UPDATE DEPARTAMENTOS SET sigla='${sigla}' WHERE id_departamento='${idDepartamento}'`, (err, result) => {
@@ -208,19 +202,20 @@ app.get('/departamento/:idDepartamento', (req, res) => {
           res.status(500)
           res.send(err)
         }
-        console.log('uptade pela SIGLA')
-
-        res.send(result)
+      
+        if (result.changedRows ==! 0) {
+          res.send({
+            message: 'SIGLA modified with success',
+          })
+        }
+        else {res.send({
+          message: 'register not modified'
+        })}
       })
-      return
-    }
-
-    
-
+  return
+}
 });
   
-  
-
 
 app.delete('/departamento/:idDepartamento',  (req, res) => {
   const { idDepartamento } = req.params
