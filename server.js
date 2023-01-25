@@ -141,7 +141,7 @@ app.post('/departamentos', (req, res) => {
     if (err) {
       res.status(500)
       res.send(err)
-      return
+      return  // sem esse retorno, quebra a aplica;çao. pois ela vai tentar continuar executando os código abaixo. 
     }
   
     //Em caso de sucesso:
@@ -213,6 +213,7 @@ app.put('/departamento/:idDepartamento', (req, res) => {
       if (err) {
         res.status(500)
         res.send(err)
+        return  // sem esse retorno, quebra a aplica;çao. pois ela vai tentar continuar executando os código abaixo. 
       }
           
       if (result.changedRows ==! 0) {
@@ -232,6 +233,8 @@ app.put('/departamento/:idDepartamento', (req, res) => {
       if (err) {
         res.status(500)
         res.send(err)
+        return  // sem esse retorno, quebra a aplica;çao. pois ela vai tentar continuar executando os código abaixo. 
+
       }
     
       if (result.changedRows ==! 0) {
@@ -254,6 +257,8 @@ app.put('/departamento/:idDepartamento', (req, res) => {
       if (err) {
         res.status(500)
         res.send(err)
+        return  // sem esse retorno, quebra a aplica;çao. pois ela vai tentar continuar executando os código abaixo. 
+
       }
       
       if (result.changedRows ==! 0) {
@@ -316,6 +321,7 @@ app.delete('/departamento/:idDepartamento',  (req, res) => {
     if (err) {
       res.status(500)
       res.send(err)
+      return  // sem esse retorno, quebra a aplica;çao. pois ela vai tentar continuar executando os código abaixo. 
     }
     
     if (result.affectedRows ==! 0) {
